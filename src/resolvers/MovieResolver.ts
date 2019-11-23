@@ -21,9 +21,18 @@ class MovieInput {
 
 @Resolver()
 export class MovieResolver {
-  @Mutation(() => Boolean)
+  @Mutation(() => Movie)
   async createMovie(@Arg("options", () => MovieInput) options: MovieInput) {
-    await Movie.insert(options);
+    const movie = await Movie.create(options).save();
+    return movie;
+  }
+
+  @Mutation(() => Boolean)
+  async updateMovie(
+    @Arg("id", () => Int) id: number,
+    @Arg("input", () => MovieInput) input: MovieInput
+  ) {
+    await Movie.update({ id }, input);
     return true;
   }
 
